@@ -1,0 +1,99 @@
+/* ================================================================
+   1. 品牌变量（全站可复用）
+   ================================================================ */
+:root {
+    --brand-gradient: linear-gradient(135deg, #4e73df 0%, #6f42c1 100%);
+    --brand-primary: #4e73df;
+}
+
+/* ================================================================
+   2. 认证页通用样式（登录 / 注册 / 忘记密码 都可复用）
+   ================================================================ */
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--brand-gradient);
+    font-family: system-ui, -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    padding: 24px 16px;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 430px;
+    border: none;
+    border-radius: 1rem;
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, .25);
+}
+
+.auth-card .card-body {
+    padding: 2.25rem 2rem;
+}
+
+.brand-icon {
+    width: 60px;
+    height: 60px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--brand-gradient);
+    color: #fff;
+    font-size: 1.75rem;
+    margin-bottom: .75rem;
+}
+
+/* 表单控件焦点态 */
+.form-control:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 .2rem rgba(78, 115, 223, .15);
+    border-color: var(--brand-primary);
+}
+
+.form-check-input:checked {
+    background-color: var(--brand-primary);
+    border-color: var(--brand-primary);
+}
+
+/* 认证页主按钮（渐变底） */
+.btn-auth {
+    background: var(--brand-gradient);
+    border: none;
+    color: #fff;
+    padding: .65rem;
+    font-weight: 600;
+    letter-spacing: .5px;
+}
+
+.btn-auth:hover:not(:disabled) {
+    color: #fff;
+    opacity: .92;
+}
+
+/* 页脚 */
+.auth-footer {
+    margin-top: 24px;
+    color: rgba(255, 255, 255, .85);
+    font-size: .8rem;
+    text-align: center;
+    line-height: 1.7;
+}
+
+.auth-footer strong {
+    color: #fff;
+}
+
+/* 分隔提示文字 */
+.auth-divider-text {
+    font-size: .8rem;
+    color: #6c757d;
+}
+
+/* ================================================================
+   3. 登录页专属样式（如果注册页布局不同，可另建 register.css 覆盖）
+   ================================================================ */
+/* 目前登录页没有额外独有的样式，
+   上面的 .auth-* 类已覆盖。
+   后续注册页如果有双列布局等差异，再在这里或 register.css 里补充。 */
