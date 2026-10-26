@@ -1,0 +1,44 @@
+/* =========================================================
+   图书管理页专属样式
+   公共布局（.sidebar / .topbar / .content / .dashboard-footer）
+   已在 dashboard.css 中定义，这里不重复
+   ========================================================= */
+
+/* ---------- 表格列宽 ---------- */
+.book-table .col-index   { width: 90px; }
+.book-table .col-price   { width: 120px; }
+.book-table .col-actions { width: 180px; }
+.book-table .col-desc {min-width: 200px;}
+
+/* ---------- 表格行微调 ---------- */
+.book-table td {
+    vertical-align: middle;
+}
+
+.book-table .book-title {
+    font-weight: 500;
+}
+
+/* 操作按钮之间留点间距（Bootstrap 的 btn 相邻会贴太紧） */
+.book-table .btn + .btn {
+    margin-left: .25rem;
+}
+
+/* ---------- 搜索框：去掉左侧边框，和 input-group-text 融合 ---------- */
+#searchInput:focus {
+    box-shadow: none;
+    border-color: #dee2e6;
+}
+
+/* ---------- 表格在窄屏下横向滚动更顺滑 ---------- */
+.table-responsive {
+    -webkit-overflow-scrolling: touch;
+}
+.book-table .book-desc {
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: help;          /* 鼠标变问号，提示"可悬浮看全文" */
+    color: #6c757d;
+}

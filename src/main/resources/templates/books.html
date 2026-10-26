@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图书管理 · serendipity 图书管理系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- 公共样式 -->
+    <link rel="stylesheet" th:href="@{/static/css/dashboard.css}">
+    <!-- 本页专属样式 -->
+    <link rel="stylesheet" th:href="@{/static/css/books.css}">
+
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- 公共脚本：侧边栏折叠 + #year -->
+    <script defer th:src="@{/static/js/dashboard.js}"></script>
+    <!-- 本页专属脚本 -->
+    <script defer th:src="@{/static/js/books.js}"></script>
+</head>
+<body>
+
+<!-- ===== 侧边栏：和 dashboard 一致，active 换成"图书管理" ===== -->
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+        <i class="bi bi-book-half"></i>
+        <span>serendipity</span>
+    </div>
+    <nav class="sidebar-nav">
+        <a th:href="@{/dashboard}" class="nav-link"><i class="bi bi-speedometer2"></i> 仪表盘</a>
+        <a th:href="@{/books}" class="nav-link active"><i class="bi bi-journal-bookmark"></i> 图书管理</a>
+        <a th:href="@{/borrows}" class="nav-link"><i class="bi bi-arrow-left-right"></i> 借阅记录</a>
+        <a th:href="@{/users}" class="nav-link"><i class="bi bi-people"></i> 用户管理</a>
+        <a th:href="@{/settings}" class="nav-link"><i class="bi bi-gear"></i> 系统设置</a>
+    </nav>
+</aside>
+
+<div class="main-wrapper" id="mainWrapper">
+    <!-- ===== 顶栏：和 dashboard 一致 ===== -->
+    <header class="topbar">
+        <button class="btn btn-sm btn-outline-secondary d-lg-none" id="sidebarToggle">
+            <i class="bi bi-list"></i>
+        </button>
+        <div class="ms-auto d-flex align-items-center gap-3">
+            <button class="btn btn-sm btn-outline-secondary position-relative">
+                <i class="bi bi-bell"></i>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">3</span>
+            </button>
+            <div class="dropdown">
+                <button class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown">
+                    <i class="bi bi-person-circle me-1"></i>
+                    <span th:text="${user != null ? user.username : '管理员'}">管理员</span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" th:href="@{/settings}">个人设置</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-danger" th:href="@{/logout}">退出登录</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== 内容区 ===== -->
+    <main class="content">
+
+        <!-- 标题 + 新增按钮 -->
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+            <div>
+                <h4 class="mb-1">图书管理</h4>
+                <p class="text-secondary small mb-0">
+                    共 <strong id="bookCount" th:text="${#lists.size(books)}">0</strong> 本图书
+                </p>
+            </div>
+            <!-- TODO(前端): 新增按钮的目标页 /books/new 需要后端 BookNewServlet 支持 -->
+            <a th:href="@{/books/new}" class="btn btn-primary">
+                <i class="bi bi-plus-lg me-1"></i> 新增图书
+            </a>
+        </div>
+
+        <!-- 搜索栏（纯前端过滤） -->
+        <div class="card border-0 shadow-sm mb-3">
+            <div class="card-body py-2">
+                <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                    <input type="text" id="searchInput"
+                           class="form-control border-start-0"
+                           placeholder="按书名 / 作者搜索...">
+                </div>
+            </div>
+        </div>
+
+        <!-- 空状态：books 为空 -->
+        <div class="card border-0 shadow-sm" id="emptyState"
+             th:if="${#lists.isEmpty(books)}">
+            <div class="card-body text-center py-5 text-secondary">
+                <i class="bi bi-inbox display-4 d-block mb-3 opacity-50"></i>
+                <p class="mb-1">暂无图书数据</p>
+                <p class="small mb-0">点击右上角"新增图书"开始录入</p>
+            </div>
+        </div>
+
+        <!-- 图书表格 -->
+        <div class="card border-0 shadow-sm" id="tableCard"
+             th:unless="${#lists.isEmpty(books)}">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0 book-table" id="bookTable">
+                    <thead class="table-light">
+                    <tr>
+                        <th class="col-index">书籍编号</th>
+                        <th>书名</th>
+                        <th>作者</th>
+                        <th class="col-price">价格</th>
+                        <th class="col-price">简介</th>
+                        <th class="col-actions text-end">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- ★ 字段名按你的 Book 实体调整 -->
+                    <tr th:each="book, iter : ${books}">
+                        <td class="text-secondary" th:text="${book.bid}">1</td>
+                        <td>
+                            <i class="bi bi-book text-primary me-2"></i>
+                            <span class="book-title" th:text="${book.title}">Java 编程思想</span>
+                        </td>
+                        <td class="book-author" th:text="${book.author}">Bruce Eckel</td>
+                        <td th:text="${book.price != null ? #numbers.formatDecimal(book.price, 1, 2) : '-'}">99.00</td>
+                        <td class="book-desc"
+                            th:text="${book.description != null and !#strings.isEmpty(book.description)
+                  ? #strings.abbreviate(book.description, 30)
+                  : '-'}"
+                            th:title="${book.description}">
+                            这是一本经典的 Java 入门书...
+                        </td>
+                        <td class="text-end">
+                            <!-- TODO(前端): 编辑页 /books/edit?id=xx 需要后端 BookEditServlet 支持 -->
+                            <a th:href="@{/books/edit(id=${book.bid})}"
+                               class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-pencil"></i> 编辑
+                            </a>
+                            <!-- TODO(前端): 删除接口见 books.js 中 deleteBook() 的 TODO(后端) -->
+                            <button type="button"
+                                    class="btn btn-sm btn-outline-danger btn-delete"
+                                    th:attr="data-id=${book.bid}, data-title=${book.title}">
+                                <i class="bi bi-trash"></i> 删除
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 搜索无结果 -->
+        <div id="noResult" class="text-center text-secondary py-4 d-none">
+            <i class="bi bi-search display-6 d-block mb-2 opacity-50"></i>
+            <span class="small">没有匹配的图书</span>
+        </div>
+
+    </main>
+
+    <footer class="dashboard-footer">
+        © <span id="year"></span> <strong>serendipity</strong> · 保留所有权利 · 解释权归 serendipity 所有
+    </footer>
+</div>
+
+</body>
+</html>
