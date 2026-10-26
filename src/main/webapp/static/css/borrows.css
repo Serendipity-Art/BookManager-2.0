@@ -1,0 +1,58 @@
+/* =========================================================
+   借阅记录页专属样式
+   公共布局（.sidebar / .topbar / .content / .dashboard-footer）
+   已在 dashboard.css 中定义，这里不重复
+   ========================================================= */
+
+/* ---------- 表格列宽 ---------- */
+.borrow-table .col-id      { width: 90px; }
+.borrow-table .col-date    { width: 120px; }
+.borrow-table .col-status  { width: 90px; }
+.borrow-table .col-actions { width: 240px; }
+
+/* ---------- 表格行微调 ---------- */
+.borrow-table td {
+    vertical-align: middle;
+}
+
+.borrow-table .book-title {
+    font-weight: 500;
+}
+
+/* 操作按钮之间留点间距 */
+.borrow-table .btn + .btn {
+    margin-left: .25rem;
+}
+
+/* ---------- 状态徽章：统一字号，视觉更整齐 ---------- */
+.borrow-table .badge {
+    font-weight: 500;
+    letter-spacing: .02em;
+    padding: .38em .65em;
+}
+
+/* ---------- 搜索框：去掉左侧边框，和 input-group-text 融合 ---------- */
+#searchInput:focus {
+    box-shadow: none;
+    border-color: #dee2e6;
+}
+
+/* ---------- 表格在窄屏下横向滚动更顺滑 ---------- */
+.table-responsive {
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ---------- 空状态 / 加载 / 错误 卡片统一下边距 ---------- */
+#loadingState, #errorState, #emptyState, #tableCard {
+    margin-bottom: 1rem;
+}
+
+/* ---------- Modal 表单微调 ---------- */
+#borrowModal .form-label {
+    font-size: .9rem;
+    margin-bottom: .35rem;
+}
+
+#borrowModal .form-text {
+    font-size: .78rem;
+}
