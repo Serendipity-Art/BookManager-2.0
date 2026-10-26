@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourcePerFileMappings">
+    <file url="file://$PROJECT_DIR$/src/main/java/com/bookmanager/mapper/BookMapper.java" value="549b38b7-2fdc-4e81-9cc2-72c07f24bc79" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/bookmanager/mapper/BorrowMapper.java" value="549b38b7-2fdc-4e81-9cc2-72c07f24bc79" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/bookmanager/mapper/UserMapper.java" value="549b38b7-2fdc-4e81-9cc2-72c07f24bc79" />
+  </component>
+</project>

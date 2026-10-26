@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!--
+    账号密码不写在这个文件里！
+    真实账号密码放在 src/main/resources/db.properties，
+    该文件已在 .gitignore 中排除，不会进版本库。
+    首次运行请复制 db.properties.example 为 db.properties 并填自己的账号。
+
+    ⚠️ 为什么 URL 不放进 db.properties：
+       MyBatis 读 .properties 时用的是【平台默认字符集】(中文 Windows 上通常是 GBK)，
+       而不是 UTF-8。本项目的库名是中文「图书管理系统」，
+       放进 .properties 会变成 "??????????????????" 导致 Unknown database 错误。
+       而 XML 文件头部自带 encoding="UTF-8"，所以 URL 留在 XML 里最安全。
+-->
+<configuration>
+    <!-- 读入 db.properties，下面用 ${key} 取值（只有账号密码） -->
+    <properties resource="db.properties"/>
+
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/图书管理系统?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=Asia/Shanghai&amp;characterEncoding=UTF-8"/>
+                <property name="username" value="${db.username}"/>
+                <property name="password" value="${db.password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <mappers>
+        <!-- 注解路线：扫描包下所有 Mapper 接口并注册 -->
+        <package name="com.bookmanager.mapper"/>
+    </mappers>
+</configuration>
