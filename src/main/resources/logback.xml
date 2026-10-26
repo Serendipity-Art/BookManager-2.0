@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Logback 配置
+    没有这个文件时,logback 会用默认配置 = 根 logger 是 DEBUG,
+    于是 MyBatis / Thymeleaf 的每一行 DEBUG 都刷到控制台,
+    真正的报错反而被淹掉 —— 排查问题时非常致命。
+
+    规则:
+      - 根 level = INFO              普通框架日志只留 INFO 以上
+      - com.bookmanager.mapper = DEBUG  我们自己写的 Mapper 才打印 SQL
+-->
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 自己的 Mapper:打印 Preparing / Parameters / Total,方便看真实 SQL -->
+    <logger name="com.bookmanager.mapper" level="DEBUG"/>
+
+    <!-- 框架的日志压下去 -->
+    <logger name="org.apache.ibatis" level="INFO"/>
+    <logger name="org.thymeleaf" level="INFO"/>
+    <logger name="com.zaxxer.hikari" level="INFO"/>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+</configuration>
